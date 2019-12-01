@@ -28,34 +28,28 @@ public class Home extends JFrame {
   };
 
   public Home() {
+    setFrameInfo();
     init();
+    addAction();
+    addComponents();
   }
 
   private void init() {
-    this.setTitle("Chess");
-    this.setSize(1000, 562);
-    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    this.setIconImage(new ImageIcon("resource/imag/logo.png").getImage());
     contentPane.setLayout(null);
-
-    // Initialize components
     netButton.setBounds((int) (this.getWidth() * 0.2), (int) (this.getHeight() * 0.5), this.getWidth() / 6, this.getHeight() / 14);
     netButton.setFocusPainted(false);
     userButton.setBounds((int) (this.getWidth() * 0.2), (int) (this.getHeight() * 0.5), this.getWidth() / 6, this.getHeight() / 14);
     robotButton.setBounds((int) (this.getWidth() * 0.2), (int) (this.getHeight() * 0.6), this.getWidth() / 6, this.getHeight() / 14);
     logoffButton.setBounds((int) (this.getWidth() * 0.2), (int) (this.getHeight() * 0.7), this.getWidth() / 6, this.getHeight() / 14);
-
-    // Initialize listener
-    addAction();
-
-    // Add components
-    contentPane.add(netButton);
-    contentPane.add(robotButton);
-
-    this.add(contentPane);
-    this.setVisible(true);
   }
 
+  private void setFrameInfo() {
+	  this.setTitle("Chess");
+	  this.setSize(1000, 562);
+	  this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	  this.setIconImage(new ImageIcon("resource/imag/logo.png").getImage());
+  }
+  
   private void addAction() {
     logoffButton.addActionListener(new ActionListener() {
       @Override
@@ -84,8 +78,6 @@ public class Home extends JFrame {
         ClientLoginMsg msg = new ClientLoginMsg(user.getName());
         MyClient.getMyClient().sendMsg(msg);
       }
-
-
     });
 
     addWindowListener(new WindowAdapter() {
@@ -96,10 +88,15 @@ public class Home extends JFrame {
         MyClient.getMyClient().sendMsg(msg);
       }
     });
-
-
   }
 
+  private void addComponents() {
+	  contentPane.add(netButton);
+	  contentPane.add(robotButton);
+	  this.add(contentPane);
+	  this.setVisible(true);
+  }
+  
   /**
    *
    * @param time   time to repaint
