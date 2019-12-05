@@ -65,10 +65,6 @@ public class Room extends JFrame {
     this.chessPanel = chessPanel;
   }
 
-  /**
-   * @wbp.parser.constructor
-   */
-
   public Room(int roomid, boolean isleft, RoomList roomList, User user) {
     this.user = user;
     this.roomList = roomList;
@@ -77,7 +73,6 @@ public class Room extends JFrame {
     this.rid = roomid;
     this.isleft = isleft;
     init(0);
-
   }
 
   public RoomList getRoomList() {
@@ -133,15 +128,7 @@ public class Room extends JFrame {
    * 功能：初始化房间、棋盘 作者：林珊珊
    */
   public void init(final int model) {// 联网对战0 人机对战1
-    this.setIconImage(new ImageIcon("resource/imag/logo.png").getImage());
-
-    this.setTitle("五子棋");
-    this.setSize(1000, 800);
-    this.setResizable(false);
-    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-    setVisible(true);
-    getContentPane().setLayout(null);
+	setFrameInfo();
 
     if (model == 0)//网络对战
       chessPanel = new ChessTable(this);
@@ -149,79 +136,9 @@ public class Room extends JFrame {
       chessPanel = new ChessTable(this, 0);
     }
 
-
-    JPanel gamer2 = new JPanel();
-    gamer2.setBounds(10, 408, 180, 290);
-    getContentPane().add(gamer2);
-    gamer2.setLayout(null);
-    gamer2.setOpaque(false);
-    if (user != null) {
-      JLabel lblNewLabel_1 = new JLabel(user.getName());
-      lblNewLabel_1.setBounds(85, 110, 130, 45);
-      gamer2.add(lblNewLabel_1);
-
-      JLabel label_2 = new JLabel();
-      label_2.setIcon(new ImageIcon(user.getFileName()));
-      label_2.setBounds(62, 35, 70, 70);
-      label_2.setOpaque(false);
-      gamer2.add(label_2);
-
-      label_3 = new JLabel(user.getWinNum() + "");
-      label_3.setBounds(85, 190, 45, 45);
-      gamer2.add(label_3);
-
-      label_4 = new JLabel(user.getLoseNum() + "");
-      label_4.setBounds(85, 240, 45, 45);
-      gamer2.add(label_4);
-    }
-    ready.setBounds(135, 53, 40, 40);
-    ready.setIcon(new ImageIcon("resource/imag/ready.png"));
-    ready.setVisible(false);
-    gamer2.add(ready);
-    gamer1.setBounds(10, 78, 180, 290);
-
-    getContentPane().add(gamer1);
-    gamer1.setLayout(null);
-    gamer1.setOpaque(false);
-
-    ready1.setBounds(135, 53, 40, 40);
-    ready1.setIcon(new ImageIcon("resource/imag/ready.png"));
-    ready1.setVisible(false);
-    gamer1.add(ready1);
-
-    jLabelll.setBounds(85, 190, 45, 45);
-    jLabelll.setOpaque(false);
-    gamer1.add(jLabelll);
-
-    jLabellll.setBounds(85, 240, 45, 45);
-    jLabellll.setOpaque(false);
-    gamer1.add(jLabellll);
-
-    lblNewLabel.setBounds(85, 110, 130, 45);
-    lblNewLabel.setOpaque(false);
-    gamer1.add(lblNewLabel);
-
-    label.setBounds(62, 35, 70, 70);
-    label.setOpaque(false);
-    gamer1.add(label);
-    /*
-		 * ImageIcon icon_ready=new ImageIcon("resource/imag/ready_icon.png");
-		 * JLabel Icon_ready = new JLabel(icon_ready); JPanel toastPanel = new
-		 * JPanel(); toastPanel.setBackground(Color.BLACK);
-		 * toastPanel.add(Icon_ready); gameRoom.add(toastPanel,
-		 * BorderLayout.SOUTH); toastPanel.setVisible(false);
-		 */
-
-    JPanel chatRoom = new JPanel();
-    chatRoom.setBounds(778, 100, 222, 658);
-    getContentPane().add(chatRoom);
-    chatRoom.setLayout(null);
-    chatRoom.setOpaque(false);
-
-    JLabel label_1 = new JLabel("聊天室");
-    label_1.setBounds(71, 147, 60, 348);
-    chatRoom.add(label_1);
-    label_1.setOpaque(false);
+    configureGamer2();
+    configureGamer1();
+    configureChat();
 
     JPanel logoPanel = new JPanel() {
       protected void paintComponent(Graphics g) {
@@ -366,6 +283,85 @@ public class Room extends JFrame {
     UIPanel.add(But_sur);
   }
 
+  private void setFrameInfo() {
+	  this.setIconImage(new ImageIcon("resource/imag/logo.png").getImage());
+	  this.setTitle("五子棋");
+	  this.setSize(1000, 800);
+	  this.setResizable(false);
+	  this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	  setVisible(true);
+	  getContentPane().setLayout(null);
+  }
+  
+  private void configureGamer2() {
+	  JPanel gamer2 = new JPanel();
+	  gamer2.setBounds(10, 408, 180, 290);
+	  getContentPane().add(gamer2);
+	  gamer2.setLayout(null);
+	  gamer2.setOpaque(false);
+	  if (user != null) {
+	    JLabel lblNewLabel_1 = new JLabel(user.getName());
+	    lblNewLabel_1.setBounds(85, 110, 130, 45);
+	    gamer2.add(lblNewLabel_1);
+	    JLabel label_2 = new JLabel();
+      	label_2.setIcon(new ImageIcon(user.getFileName()));
+	    label_2.setBounds(62, 35, 70, 70);
+	    label_2.setOpaque(false);
+	    gamer2.add(label_2);
+
+	    label_3 = new JLabel(user.getWinNum() + "");
+	    label_3.setBounds(85, 190, 45, 45);
+	    gamer2.add(label_3);
+
+	    label_4 = new JLabel(user.getLoseNum() + "");
+	    label_4.setBounds(85, 240, 45, 45);
+	    gamer2.add(label_4);
+	  }
+	  ready.setBounds(135, 53, 40, 40);
+	  ready.setIcon(new ImageIcon("resource/imag/ready.png"));
+	  ready.setVisible(false);
+	  gamer2.add(ready);
+  }
+  
+  private void configureGamer1() {
+	  gamer1.setBounds(10, 78, 180, 290);
+
+	  getContentPane().add(gamer1);
+	  gamer1.setLayout(null);
+	  gamer1.setOpaque(false);
+	  ready1.setBounds(135, 53, 40, 40);
+	  ready1.setIcon(new ImageIcon("resource/imag/ready.png"));
+	  ready1.setVisible(false);
+	  gamer1.add(ready1);
+	  jLabelll.setBounds(85, 190, 45, 45);
+	  jLabelll.setOpaque(false);
+	  gamer1.add(jLabelll);
+
+	  jLabellll.setBounds(85, 240, 45, 45);
+	  jLabellll.setOpaque(false);
+	  gamer1.add(jLabellll);
+	  lblNewLabel.setBounds(85, 110, 130, 45);
+	  lblNewLabel.setOpaque(false);
+	  gamer1.add(lblNewLabel);
+
+	  label.setBounds(62, 35, 70, 70);
+	  label.setOpaque(false);
+	  gamer1.add(label);
+  }
+  
+  private void configureChat() {
+	  JPanel chatRoom = new JPanel();
+	  chatRoom.setBounds(778, 100, 222, 658);
+	  getContentPane().add(chatRoom);
+	  chatRoom.setLayout(null);
+	  chatRoom.setOpaque(false);
+
+	  JLabel label_1 = new JLabel("聊天室");
+	  label_1.setBounds(71, 147, 60, 348);
+	  chatRoom.add(label_1);
+	  label_1.setOpaque(false);
+  }
+  
   public void setAnotherPlayer(RoomPojo roomPojo) {
     System.out.println(roomPojo);
     if (roomPojo.getRid() != rid) return;
