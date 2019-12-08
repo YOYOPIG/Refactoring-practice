@@ -122,7 +122,7 @@ public class Home extends JFrame {
   }
 
   public void toRoom() {
-    new Room(this);
+    new SingleplayerRoom(this);
     this.setVisible(false);
   }
 }

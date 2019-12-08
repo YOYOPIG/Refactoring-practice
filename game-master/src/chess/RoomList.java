@@ -442,9 +442,8 @@ public class RoomList extends JFrame {
   }
 
   public void toRoom(int roomid, boolean isleft,User user) {
-
-	  new Room(roomid,isleft,this,user);
-    this.setVisible(false);
+	new MultiplayerRoom(roomid,isleft,this,user);
+	this.setVisible(false);
   }
 
   //返回大厅

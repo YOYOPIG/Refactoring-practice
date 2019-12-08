@@ -1,6 +1,5 @@
 package chess;
 
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
@@ -22,15 +21,14 @@ import util.IChess;
 import entity.RoomPojo;
 import entity.User;
 
-
 public class Room extends JFrame {
   public boolean gameStart;
   public boolean backGame;
-  private RoomList roomList;
-  private Home home;
-  private int rid;// 房间编号
-  private User leftPlayer;// 房间内左边玩家
-  private User rightPlayer;// 房间内右边玩家
+  protected RoomList roomList;
+  protected Home home;
+  protected int rid;// room id rename this!
+  private User leftPlayer;
+  private User rightPlayer;
   private static boolean canplay = false;
   private static boolean beforeRegret = false;
   public boolean visible = false;
@@ -40,9 +38,6 @@ public class Room extends JFrame {
   JLabel ready = new JLabel();
   JLabel ready1 = new JLabel();
   JLabel label_4;
-  //private boolean isLeftPlay=false;//左边玩家是否可落子
-  //private boolean isRightPlay=false;//右边玩家是否可落子
-
 
   public boolean isCanplay() {
     return canplay;
@@ -55,7 +50,7 @@ public class Room extends JFrame {
   private int status;// 房间的状态
   private ChessTable chessPanel;
   public static boolean isleft;
-  private User user;
+  protected User user;
 
   public ChessTable getChessPanel() {
     return chessPanel;
@@ -65,14 +60,8 @@ public class Room extends JFrame {
     this.chessPanel = chessPanel;
   }
 
-  public Room(int roomid, boolean isleft, RoomList roomList, User user) {
-    this.user = user;
-    this.roomList = roomList;
-    MyClient.getMyClient().setRoom(this);
-    System.out.println("网络对战");
-    this.rid = roomid;
-    this.isleft = isleft;
-    init(0);
+  public Room(boolean isleft) {
+	  this.isleft = isleft;
   }
 
   public RoomList getRoomList() {
@@ -119,9 +108,8 @@ public class Room extends JFrame {
   JLabel label = new JLabel();
   JLabel lblNewLabel = new JLabel();
 
-  public Room(Home home) {
-    this.home = home;
-    init(1);// 人机
+  public Room() {
+    return;
   }
   JLabel label_3;
   /**
@@ -139,27 +127,7 @@ public class Room extends JFrame {
     configureGamer2();
     configureGamer1();
     configureChat();
-
-    JPanel logoPanel = new JPanel() {
-      protected void paintComponent(Graphics g) {
-        Image image = new ImageIcon("resource/imag/room.png").getImage();
-        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-      }
-    };
-    logoPanel.setBounds(0, 0, 1000, 800);
-    getContentPane().add(logoPanel);
-    logoPanel.setLayout(null);
-    logoPanel.setOpaque(false);
-
-    chessPanel.setBounds(215, 100, 545, 545);
-    logoPanel.add(chessPanel);
-
-    JPanel UIPanel = new JPanel();
-    UIPanel.setBounds(173, 670, 515, 33);
-    logoPanel.add(UIPanel);
-    UIPanel.setLayout(null);
-    UIPanel.setOpaque(false);
-
+    JPanel UIPanel = configureUIPanel();
 
     JButton But_ready = new JButton("准备");
     But_ready.addMouseListener(new MouseAdapter() {
@@ -362,6 +330,29 @@ public class Room extends JFrame {
 	  label_1.setOpaque(false);
   }
   
+  private JPanel configureUIPanel() {
+	  JPanel logoPanel = new JPanel() {
+	      protected void paintComponent(Graphics g) {
+	        Image image = new ImageIcon("resource/imag/room.png").getImage();
+	        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+	      }
+	    };
+	    logoPanel.setBounds(0, 0, 1000, 800);
+	    getContentPane().add(logoPanel);
+	    logoPanel.setLayout(null);
+	    logoPanel.setOpaque(false);
+
+	    chessPanel.setBounds(215, 100, 545, 545);
+	    logoPanel.add(chessPanel);
+	    
+	    JPanel UIPanel = new JPanel();
+	    UIPanel.setBounds(173, 670, 515, 33);
+	    logoPanel.add(UIPanel);
+	    UIPanel.setLayout(null);
+	    UIPanel.setOpaque(false);
+	    return UIPanel;
+  }
+  
   public void setAnotherPlayer(RoomPojo roomPojo) {
     System.out.println(roomPojo);
     if (roomPojo.getRid() != rid) return;
@@ -433,7 +424,7 @@ public class Room extends JFrame {
 
 
   public static void main(String[] args) {
-    Room r = new Room(new Home());
+    Room r = new SingleplayerRoom(new Home());
   }
 
   public void gameStart() {
