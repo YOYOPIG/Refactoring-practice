@@ -21,16 +21,16 @@ import util.IChess;
 import entity.RoomPojo;
 import entity.User;
 
-public class Room extends JFrame {
+public abstract class Room extends JFrame {
   public boolean gameStart;
   public boolean backGame;
   protected RoomList roomList;
   protected Home home;
-  protected int rid;// room id rename this!
+  protected int roomID;
   private User leftPlayer;
   private User rightPlayer;
   private static boolean canplay = false;
-  private static boolean beforeRegret = false;
+  protected static boolean beforeRegret = false;
   public boolean visible = false;
   JPanel gamer1 = new JPanel();
   JLabel jLabellll = new JLabel();
@@ -38,6 +38,21 @@ public class Room extends JFrame {
   JLabel ready = new JLabel();
   JLabel ready1 = new JLabel();
   JLabel label_4;
+  JLabel label = new JLabel();
+  JLabel lblNewLabel = new JLabel();
+  JLabel label_3;
+  private int status;// 房间的状态
+  protected ChessTable chessPanel;
+  public static boolean isleft;
+  protected User user;
+  
+  public Room() {
+	  return;
+  }
+  
+  public Room(boolean isleft) {
+	  this.isleft = isleft;
+  }
 
   public boolean isCanplay() {
     return canplay;
@@ -47,21 +62,12 @@ public class Room extends JFrame {
     this.canplay = canplay;
   }
 
-  private int status;// 房间的状态
-  private ChessTable chessPanel;
-  public static boolean isleft;
-  protected User user;
-
   public ChessTable getChessPanel() {
     return chessPanel;
   }
 
   public void setChessPanel(ChessTable chessPanel) {
     this.chessPanel = chessPanel;
-  }
-
-  public Room(boolean isleft) {
-	  this.isleft = isleft;
   }
 
   public RoomList getRoomList() {
@@ -73,11 +79,11 @@ public class Room extends JFrame {
   }
 
   public int getRid() {
-    return rid;
+    return roomID;
   }
 
   public void setRid(int rid) {
-    this.rid = rid;
+    this.roomID = rid;
   }
 
   public User getLeftPlayer() {
@@ -105,153 +111,22 @@ public class Room extends JFrame {
     this.status = status;
   }
 
-  JLabel label = new JLabel();
-  JLabel lblNewLabel = new JLabel();
-
-  public Room() {
-    return;
-  }
-  JLabel label_3;
+  
   /**
    * 功能：初始化房间、棋盘 作者：林珊珊
    */
   public void init(final int model) {// 联网对战0 人机对战1
-	setFrameInfo();
-
-    if (model == 0)//网络对战
-      chessPanel = new ChessTable(this);
-    else {
-      chessPanel = new ChessTable(this, 0);
-    }
-
+	configureFrameInfo();
+	createChessTable();
     configureGamer2();
     configureGamer1();
     configureChat();
     JPanel UIPanel = configureUIPanel();
-
-    JButton But_ready = new JButton("准备");
-    But_ready.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        if (gameStart == false) {
-          visible = !visible;
-          ready.setVisible(visible);
-          ClientBeReady msg = new ClientBeReady(rid, isleft);
-          MyClient.getMyClient().sendMsg(msg);//发给服务器
-        }
-      }
-    });
-    But_ready.setBounds(157, 5, 73, 23);
-    if (model == 0)
-      UIPanel.add(But_ready);
-    else {
-      JButton refresh = new JButton("重新开始");
-      refresh.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          chessPanel.getChessimpl().ResetGame();
-          repaint();
-        }
-      });
-      refresh.setBounds(150, 5, 80, 23);
-      UIPanel.add(refresh);
-    }
-
-    /**
-     * 退出按钮
-     */
-    JButton But_exit = new JButton("退出");
-    But_exit.setBounds(416, 5, 73, 23);
-    But_exit.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        if (model == 0) {
-          if (gameStart == true) {
-            String[] options = {"我还可以再战!", "我认怂 T T"};
-            int res = JOptionPane.showOptionDialog(null, "对方把你吓尿了~~", "这样真的好吗?",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.YES_NO_OPTION,
-                null, options, options[0]);
-            if (res == 0) return;
-            ClientGameOver msg = new ClientGameOver(getRid(), !isleft);
-            MyClient.getMyClient().sendMsg(msg);
-          }
-          ClientOutRoomMsg msg1 = new ClientOutRoomMsg(rid, isleft);
-          MyClient.getMyClient().sendMsg(msg1);
-        }
-        chessPanel.getChessimpl().ResetGame();
-        toRoomList();
-      }
-    });
-    addWindowListener(new WindowAdapter() {
-      @Override
-      public void windowClosing(WindowEvent e) {
-        if (model == 0) {
-          ClientOutRoomMsg msg = new ClientOutRoomMsg(rid, isleft);
-          MyClient.getMyClient().sendMsg(msg);
-          ClientOffMsg msg1 = new ClientOffMsg();
-          MyClient.getMyClient().sendMsg(msg1);
-        }
-      }
-    });
-    UIPanel.add(But_exit);
-
-    JButton But_regret = new JButton("悔棋");
-    But_regret.setBounds(240, 5, 78, 23);
-    But_regret.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        if (backGame == true) {
-          String[] options = {"爸爸", "不叫"};
-          int res = JOptionPane.showOptionDialog(null, "叫爸爸", "还想悔棋?",
-              JOptionPane.DEFAULT_OPTION, JOptionPane.YES_NO_OPTION,
-              new ImageIcon("resource/imag/back.png"), options, options[0]);
-          if (res == 0) {
-            if (model == 0) {//联机
-              beforeRegret = isCanplay();
-              setCanplay(false);
-              ClientBackChess msg = new ClientBackChess(rid, isleft);
-              MyClient.getMyClient().sendMsg(msg);//发给服务器
-
-            } else {//人机
-              chessPanel.unpaintItem();
-            }
-          }
-        }
-      }
-    });
-    UIPanel.add(But_regret);
-
-    JButton But_sur = new JButton("认输");
-    But_sur.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if (model == 1) {
-          String[] options = {"我还可以再战!", "我认怂 T T"};
-          int res = JOptionPane.showOptionDialog(null, "你连机器人都打不过,还好意思认输~~", "这样真的好吗?",
-              JOptionPane.DEFAULT_OPTION, JOptionPane.YES_NO_OPTION,
-              new ImageIcon("resource/imag/touxiang.png"), options, options[0]);
-          if (res == 1) {
-            deafeat();
-          }
-        } else {
-          if (gameStart == true) {
-            String[] options = {"我还可以再战!", "我认怂 T T"};
-            int res = JOptionPane.showOptionDialog(null, "对方把你吓尿了~~", "这样真的好吗?",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.YES_NO_OPTION,
-                new ImageIcon("resource/imag/touxiang.png"), options, options[0]);
-            if (res == 1) {
-              ClientGameOver msg = new ClientGameOver(getRid(), !isleft);
-              MyClient.getMyClient().sendMsg(msg);
-            }
-          }
-        }
-      }
-    });
-    But_sur.setBounds(328, 5, 78, 23);
-    UIPanel.add(But_sur);
+    addButtons(UIPanel);
+    configureWindowClose();
   }
 
-  private void setFrameInfo() {
+  private void configureFrameInfo() {
 	  this.setIconImage(new ImageIcon("resource/imag/logo.png").getImage());
 	  this.setTitle("五子棋");
 	  this.setSize(1000, 800);
@@ -260,6 +135,8 @@ public class Room extends JFrame {
 	  setVisible(true);
 	  getContentPane().setLayout(null);
   }
+  
+  abstract protected void createChessTable();
   
   private void configureGamer2() {
 	  JPanel gamer2 = new JPanel();
@@ -353,9 +230,32 @@ public class Room extends JFrame {
 	    return UIPanel;
   }
   
+  private void addButtons(JPanel UIPanel) {
+	  JButton But_ready = createReadyButton();
+	  JButton But_exit = createExitButton();
+	  JButton But_reg = createRegretButton();
+	  JButton But_sur = createSurrenderButton();
+	  
+	  UIPanel.add(But_ready);
+	  UIPanel.add(But_exit);
+	  UIPanel.add(But_reg);
+	  UIPanel.add(But_sur);
+  }
+  
+  abstract protected JButton createReadyButton();
+  abstract protected JButton createExitButton();
+  abstract protected JButton createRegretButton();
+  abstract protected JButton createSurrenderButton();
+  
+  protected void configureWindowClose() {
+	  addWindowListener(new WindowAdapter() {
+		  
+	  });
+  }
+  
   public void setAnotherPlayer(RoomPojo roomPojo) {
     System.out.println(roomPojo);
-    if (roomPojo.getRid() != rid) return;
+    if (roomPojo.getRid() != roomID) return;
     User user;
     boolean flag;
     if (isleft) {
@@ -398,7 +298,7 @@ public class Room extends JFrame {
   }
 
   public void setReady(RoomPojo roomPojo) {
-    if (roomPojo.getRid() != rid) return;
+    if (roomPojo.getRid() != roomID) return;
     if (isleft) {
       ready1.setVisible(roomPojo.isRightReady());
     } else
@@ -406,7 +306,7 @@ public class Room extends JFrame {
   }
 
   public void resetReady(RoomPojo roomPojo) {
-    if (roomPojo.getRid() != rid) return;
+    if (roomPojo.getRid() != roomID) return;
     ready1.setVisible(false);
   }
 
@@ -460,7 +360,7 @@ public class Room extends JFrame {
       setCanplay(false);
       backGame = false;
     }
-    ClientBackResult msg = new ClientBackResult(result, rid, isleft);
+    ClientBackResult msg = new ClientBackResult(result, roomID, isleft);
     MyClient.getMyClient().sendMsg(msg);
   }
 
@@ -478,7 +378,7 @@ public class Room extends JFrame {
     backGame = false;
     setCanplay(true);
     chessPanel.unpaintItem();//本身面板
-    ClientMovePieces msg = new ClientMovePieces(rid, isleft, ChessImpl.chess, true, 0, 0);
+    ClientMovePieces msg = new ClientMovePieces(roomID, isleft, ChessImpl.chess, true, 0, 0);
     MyClient.getMyClient().sendMsg(msg);
     JOptionPane.showMessageDialog(this,
         "乖儿子", "对方同意了你的请求", JOptionPane.ERROR_MESSAGE);
