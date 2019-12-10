@@ -29,7 +29,7 @@ public class MultiplayerRoom extends Room{
 	    System.out.println("网络对战");
 	    this.roomID = roomid;
 	    //Room.isleft = isleft;
-	    init(0);
+	    init();
 	}
 	
 	@Override
@@ -69,7 +69,7 @@ public class MultiplayerRoom extends Room{
 	              JOptionPane.DEFAULT_OPTION, JOptionPane.YES_NO_OPTION,
 	              null, options, options[0]);
 	          if (res == 0) return;
-	          ClientGameOver msg = new ClientGameOver(getRid(), !isleft);
+	          ClientGameOver msg = new ClientGameOver(getRoomID(), !isleft);
 	          MyClient.getMyClient().sendMsg(msg);
 	        }
 	        ClientOutRoomMsg msg1 = new ClientOutRoomMsg(roomID, isleft);
@@ -119,7 +119,7 @@ public class MultiplayerRoom extends Room{
 	                JOptionPane.DEFAULT_OPTION, JOptionPane.YES_NO_OPTION,
 	                new ImageIcon("resource/imag/touxiang.png"), options, options[0]);
 	            if (res == 1) {
-	              ClientGameOver msg = new ClientGameOver(getRid(), !isleft);
+	              ClientGameOver msg = new ClientGameOver(getRoomID(), !isleft);
 	              MyClient.getMyClient().sendMsg(msg);
 	            }
 	          }
@@ -140,4 +140,10 @@ public class MultiplayerRoom extends Room{
 			}
 		});
 	  }
+
+	@Override
+	public void toRoomList() {
+		roomList.setVisible(true);
+		this.dispose();
+	}
 }

@@ -41,7 +41,7 @@ public abstract class Room extends JFrame {
   JLabel label = new JLabel();
   JLabel lblNewLabel = new JLabel();
   JLabel label_3;
-  private int status;// 房间的状态
+  private int status;
   protected ChessTable chessPanel;
   public static boolean isleft;
   protected User user;
@@ -78,11 +78,11 @@ public abstract class Room extends JFrame {
     this.roomList = roomList;
   }
 
-  public int getRid() {
+  public int getRoomID() {
     return roomID;
   }
 
-  public void setRid(int rid) {
+  public void setRoomID(int rid) {
     this.roomID = rid;
   }
 
@@ -115,11 +115,10 @@ public abstract class Room extends JFrame {
   /**
    * 功能：初始化房间、棋盘 作者：林珊珊
    */
-  public void init(final int model) {// 联网对战0 人机对战1
+  public void init() {
 	configureFrameInfo();
 	createChessTable();
-    configureGamer2();
-    configureGamer1();
+	configureGamers();
     configureChat();
     JPanel UIPanel = configureUIPanel();
     addButtons(UIPanel);
@@ -137,6 +136,11 @@ public abstract class Room extends JFrame {
   }
   
   abstract protected void createChessTable();
+  
+  private void configureGamers() {
+	  configureGamer2();
+	  configureGamer1();
+  }
   
   private void configureGamer2() {
 	  JPanel gamer2 = new JPanel();
@@ -310,17 +314,7 @@ public abstract class Room extends JFrame {
     ready1.setVisible(false);
   }
 
-  /**
-   * 功能：跳转至房间列表页面 作者：林珊珊
-   */
-  public void toRoomList() {
-    if (home == null)
-      roomList.setVisible(true);
-    else {
-      home.setVisible(true);
-    }
-    this.dispose();
-  }
+  public abstract void toRoomList();
 
 
   public static void main(String[] args) {
@@ -338,10 +332,6 @@ public abstract class Room extends JFrame {
       ready.setIcon(new ImageIcon("resource/imag/white.png"));
       ready1.setIcon(new ImageIcon("resource/imag/black.png"));
     }
-
-    //if((isLeftPlay()==false)&&(isRightPlay()==false)){
-    //setLeftPlay(true);//黑棋先手
-    //}
   }
 
   public void decide() {
@@ -370,8 +360,6 @@ public abstract class Room extends JFrame {
     }
     JOptionPane.showMessageDialog(this,
         "对方儿子太多", "对方拒绝了你的请求", JOptionPane.ERROR_MESSAGE);
-
-
   }
 
   public void BackSucceed() {
@@ -409,7 +397,7 @@ public abstract class Room extends JFrame {
     resetGame();
   }
 
-  public void deafeat() {
+  public void defeat() {
     if(chessPanel.model==0) {
       jLabelll.setText("" + (Integer.parseInt(jLabelll.getText()) + 1));
       jLabellll.setText(""+(Integer.parseInt(jLabellll.getText())+1));
@@ -420,7 +408,7 @@ public abstract class Room extends JFrame {
     resetGame();
   }
 
-  public void pingju() {
+  public void drawGame() {
     new Thread(new AudioPlayer("resource/audio/pingju.wav")).start();
     JOptionPane.showMessageDialog(this,
         "相亲相爱一家人~~", "平局！", JOptionPane.ERROR_MESSAGE);

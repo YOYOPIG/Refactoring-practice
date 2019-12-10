@@ -18,7 +18,7 @@ public class SingleplayerRoom extends Room{
 	public SingleplayerRoom(Home home) {
 		super();
 		this.home = home;
-	    init(1);// 人机
+	    init();
 	}
 	
 	@Override
@@ -85,10 +85,16 @@ public class SingleplayerRoom extends Room{
 	            JOptionPane.DEFAULT_OPTION, JOptionPane.YES_NO_OPTION,
 	            new ImageIcon("resource/imag/touxiang.png"), options, options[0]);
 	        if (res == 1)
-	          deafeat();
+	          defeat();
 	      }
 	    });
 	    But_sur.setBounds(328, 5, 78, 23);
 		return But_sur;
+	}
+
+	@Override
+	public void toRoomList() {
+		home.setVisible(true);
+		this.dispose();
 	}
 }
