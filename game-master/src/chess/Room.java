@@ -386,7 +386,7 @@ public abstract class Room extends JFrame {
   }
 
   public void win() {
-    if(chessPanel.model==0) {
+    if(chessPanel instanceof MultiplayerChessTable) {
       user = MyServer.getMyServer().findUser(user.getName());
       label_3.setText(user.getWinNum() + "");
       label_4.setText(user.getLoseNum()+"");
@@ -398,7 +398,7 @@ public abstract class Room extends JFrame {
   }
 
   public void defeat() {
-    if(chessPanel.model==0) {
+    if(chessPanel instanceof MultiplayerChessTable) {
       jLabelll.setText("" + (Integer.parseInt(jLabelll.getText()) + 1));
       jLabellll.setText(""+(Integer.parseInt(jLabellll.getText())+1));
     }

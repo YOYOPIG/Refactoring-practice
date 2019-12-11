@@ -8,9 +8,9 @@ import util.IChess;
  */
 public class HumanThread implements Runnable {
   private IChess chess;
-  private ChessTable chessTable;
+  private SingleplayerChessTable chessTable;
 
-  public HumanThread(ChessTable chessTable, IChess chess) {
+  public HumanThread(SingleplayerChessTable chessTable, IChess chess) {
     this.chessTable = chessTable;
     this.chess = chess;
   }

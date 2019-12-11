@@ -23,7 +23,7 @@ public class SingleplayerRoom extends Room{
 	
 	@Override
 	protected void createChessTable() {
-		chessPanel = new ChessTable(this, 0);
+		chessPanel = new SingleplayerChessTable(this);
 	}
 
 	@Override

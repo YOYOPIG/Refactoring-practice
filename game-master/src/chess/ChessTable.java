@@ -29,26 +29,24 @@ import util.IChess;
  * 功能：棋盘面板 作者:林珊珊
  */
 
-public class ChessTable extends JPanel {
+public abstract class ChessTable extends JPanel {
 
-  private Executor pool = Executors.newFixedThreadPool(2); // 2个线程容量的线程池
-  private RobotThread robotThread = new RobotThread(this, chessimpl); // 机器人线程
-  private HumanThread humanThread = new HumanThread(this, chessimpl); // 人类线程
-  private AudioPlayer audioPlayer=new AudioPlayer("resource/audio/down.wav");
-  private AudioPlayer audioStopPlayer=new AudioPlayer("resource/audio/stop.wav");
-  private ChessTable chessTable = this;
-  private boolean lock = false; // 同步锁
-  private int humanX; // 鼠标点击的坐标
-  private int humanY; // 鼠标点击的坐标
-  public int model;
-  private Room room;
+  protected Executor pool = Executors.newFixedThreadPool(2); // 2个线程容量的线程池
+  
+  protected AudioPlayer audioPlayer=new AudioPlayer("resource/audio/down.wav");
+  protected AudioPlayer audioStopPlayer=new AudioPlayer("resource/audio/stop.wav");
+  protected ChessTable chessTable = this;
+  protected boolean lock = false; // 同步锁
+  protected int humanX; // 鼠标点击的坐标
+  protected int humanY; // 鼠标点击的坐标
+  protected Room room;
 
   public static final int chess_BLACK = 2;
   public static final int chess_WHITE = 1;
   public static final int chess_EMPTY = 0;
   public static boolean isReady = false;
   public int Moves;// 本局比赛已下的总步数
-  private int[][] mark = new int[15][15];
+  protected int[][] mark = new int[15][15];
   public static IChess chessimpl = new ChessImpl();
 
   public static IChess getChessimpl() {
@@ -75,23 +73,8 @@ public class ChessTable extends JPanel {
   public ChessTable(Room room) {
 
     this.room = room;
-    model = 0;
     Moves = 0;
-    System.out.println("这个房间是网络对战模式");
     this.setBounds(0, 0, BOARD_WIDTH, BOARD_WIDTH);
-    this.addMouseListener(new MouseHandler());
-  }
-
-  public ChessTable(Room room,int flag) {// 人机
-    super(null);
-    Moves = 0;
-    model = 1;
-    this.room=room;
-    chessimpl.ResetGame();
-
-    this.setBounds(0, 0, BOARD_WIDTH, BOARD_WIDTH);
-    pool.execute(humanThread); // 开启人类线程
-    pool.execute(robotThread); // 开启机器人线程
   }
 
   /**
@@ -131,113 +114,11 @@ public class ChessTable extends JPanel {
   }
 
   /**
-   * 输入：鼠标点击 功能：为棋盘设定鼠标监听器 输出：棋盘落子效果
-   *
-   * @author 林珊珊
-   */
-  public class MouseHandler extends MouseAdapter {
-    public void mousePressed(MouseEvent event) {
-
-      synchronized (chessTable) {
-        int x = event.getX();
-        int y = event.getY();
-
-        if (x > 30 && x < 535 && y > 30 && y < 535) {
-          humanX = (x - 21) / 34;
-          humanY = (y - 21) / 34;
-          if (model == 1) {// 人机
-            if (paintItem(humanX, humanY)) {
-              room.backGame=true;
-              Moves++;
-              System.out.println("黑棋在这" + humanX + "," + humanY);
-              System.out.println("is here!");
-              mark[humanX][humanY] = 1;
-              lock = true;
-              repaint();
-              audioPlayer.run();
-              if(Moves==225)
-                room.drawGame();
-              else if(chessimpl.compare(humanX,humanY,2)){
-                room.win();
-              }else
-              chessTable.notifyAll();
-            } else {
-              audioStopPlayer.run();
-            }
-          } else {
-
-            if(room.isCanplay()) {
-              if (paintItem(humanX, humanY)) {
-                room.backGame=true;
-                Moves++;
-                if (Moves == 225)
-                  room.drawGame();
-                room.setCanplay(false);
-                System.out.println("kjdhasjdakdhads+==========" + ChessImpl.chess[0][0]);
-                ClientMovePieces msg = new ClientMovePieces(
-                    room.getRoomID(), room.isleft, ChessImpl.chess, false, humanX, humanY);
-                MyClient.getMyClient().sendMsg(msg);
-                room.getChessPanel().setMark(humanX, humanY);
-                room.repaint();
-                audioPlayer.run();
-                if(room.isleft) {
-                  if (chessimpl.compare(humanX, humanY, 2)) {//黑棋赢了，发送游戏结束报文
-                    ClientGameOver msg1 = new ClientGameOver(room.getRoomID(), room.isleft);
-                    MyClient.getMyClient().sendMsg(msg1);
-                  }
-                }else{
-                  if (chessimpl.compare(humanX, humanY, 1)) {//白棋赢了
-                    ClientGameOver msg1 = new ClientGameOver(room.getRoomID(), room.isleft);
-                    MyClient.getMyClient().sendMsg(msg1);
-                  }
-                }
-              }
-              else
-                audioStopPlayer.run();
-            }
-
-          }
-        } else {
-          System.out.println("请将棋子放进棋盘内");
-        }
-        System.out.println("x:" + x + "y:" + y);
-      }
-    }
-  }
-
-  /**
    * 输入：监听器所获取的鼠标坐标 功能：为棋盘绘出棋子 输出：无
    *
    * @author 林珊珊
    */
-  boolean paintItem(int i, int j) {// 落子
-    boolean succeed = false;
-    if (i < 15 && j < 15) {
-      if (model == 1) {// 人机
-        if (!chessimpl.add(i, j, 2)) {
-          return false;// 棋子不能下在这个位置
-        }
-        return true;
-      } else {// 网络对战
-        if (room.isleft) {// 黑棋玩家
-          Moves++;
-          succeed = chessimpl.add(i, j, 2);
-
-
-        } else {// 白棋玩家
-          Moves++;
-          succeed = chessimpl.add(i, j, 1);
-
-
-        }
-        return succeed;
-        // System.out.println("未能明确棋子颜色");
-      }
-    } else {
-      System.out.println("棋子没添加成功");
-    }
-    return false;
-  }
+  abstract boolean paintItem(int i, int j);
 
   /**
    * 功能: 绘制棋盘表格图、重绘已下的棋子
@@ -334,19 +215,7 @@ public class ChessTable extends JPanel {
    *
    * @author 林珊珊
    */
-  public void unpaintItem() {
-    if (model == 0) {//联机悔棋
-      if (room.isleft) {
-        chessimpl.delete(2);//黑方悔棋
-      } else {
-        chessimpl.delete(1);//白方悔棋
-      }
-      //Moves--;
-    } else {
-      chessimpl.delete(2);
-    }
-    repaint();
-  }
+  abstract public void unpaintItem();
 
   public void receiveChess(int[][] chess, boolean backChess,int x,int y) {
     if (!backChess) {

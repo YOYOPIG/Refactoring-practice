@@ -34,7 +34,7 @@ public class MultiplayerRoom extends Room{
 	
 	@Override
 	protected void createChessTable() {
-		chessPanel = new ChessTable(this);
+		chessPanel = new MultiplayerChessTable(this);
 	}
 	
 	@Override
