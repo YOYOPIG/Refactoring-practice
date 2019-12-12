@@ -2,8 +2,11 @@ package chess;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class SingleplayerChessTable extends ChessTable{
+	private Executor pool = Executors.newFixedThreadPool(2); // 2个线程容量的线程池
 	private RobotThread robotThread = new RobotThread(this, chessimpl); // 机器人线程
 	private HumanThread humanThread = new HumanThread(this, chessimpl); // 人类线程
 
@@ -66,6 +69,55 @@ public class SingleplayerChessTable extends ChessTable{
 	public void unpaintItem() {
 	    chessimpl.delete(2);
 	    repaint();
+	  }
+	
+	  public synchronized void robotChess() {
+	    System.out.println("机器线程开启");
+	    synchronized (chessTable) {
+	      while (true) {
+	        if (!lock) {
+	        	tryWaitForLock();
+	        } else {
+	          tryThreadSleep();
+	          updateGameSituation();
+	        }
+	      }
+	    }
+	  }
+
+	  private void tryWaitForLock() {
+		  try {
+	        wait();
+	      } catch (Exception e) {
+	        e.printStackTrace();
+	      }
+	  }
+
+	  private void tryThreadSleep() {
+		  try {
+	        Thread.sleep(700);
+	      } catch (Exception e) {
+	        e.printStackTrace();
+	      }
+	  }
+	  
+	  private void updateGameSituation() {
+		  int[] XY = chessimpl.ComTurn(humanX, humanY);
+	      mark[XY[0]][XY[1]] = 1;
+	      repaint();
+	      Moves++;
+	      lock = false;
+	      audioPlayer.run();
+	      checkIfGameEnds(XY);
+	  }
+	  
+	  private void checkIfGameEnds(int[] XY) {
+		  if(Moves==225)
+	          room.drawGame();
+	        else if(chessimpl.compare(XY[0],XY[1],1))
+	          room.defeat();
+	        else
+	          chessTable.notifyAll();
 	  }
 	
 }

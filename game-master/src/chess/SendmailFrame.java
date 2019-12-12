@@ -45,7 +45,7 @@ public class SendmailFrame extends JFrame {
 	public SendmailFrame() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage("resource/imag/Sendmailframe.png"));
 		getContentPane().setFont(new Font("宋体", Font.BOLD, 14));
-setVisible(true);
+		setVisible(true);
 		setBounds(new Rectangle(200, 200, 50, 50));
 		setSize(394, 394);
 
@@ -230,17 +230,3 @@ setVisible(true);
 	
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

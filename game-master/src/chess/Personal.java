@@ -15,6 +15,5 @@ public class Personal extends JFrame {
   }
   private void toRoomList(){
     roomList.setVisible(true);
-    //关闭本窗口  this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
   }
 }

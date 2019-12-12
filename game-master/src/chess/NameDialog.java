@@ -27,27 +27,36 @@ public class NameDialog extends JDialog {
 
   public NameDialog(Home home) {
     MyClient.getMyClient().setNamedialog(this);
-    this.setModal(true);
-    this.home = home;
-    this.setResizable(false);
-    this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    this.setBounds((int) (home.getWidth() * 0.4), (int) (home.getHeight() * 0.4), 260, 150);
-    this.setLayout(null);
-
-    nameTip.setBounds(30, 20, 100, 15);
-    nameTextField.setBounds(30, 40, 200, 30);
-    ok.setBounds(30, 80, 90, 30);
-    cancel.setBounds(140, 80, 90, 30);
-
+    configureDialog();
+    setGraphicObjectBounds();
     addAction();
-
-    this.add(nameTip);
-    this.add(ok);
-    this.add(nameTextField);
-    this.add(cancel);
-    this.setVisible(true);
+    showGraphicObjects();
+  }
+  
+  private void configureDialog() {
+	  this.setModal(true);
+	  this.home = home;
+	  this.setResizable(false);
+	  this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	  this.setBounds((int) (home.getWidth() * 0.4), (int) (home.getHeight() * 0.4), 260, 150);
+	  this.setLayout(null);
   }
 
+  private void setGraphicObjectBounds() {
+	  nameTip.setBounds(30, 20, 100, 15);
+	    nameTextField.setBounds(30, 40, 200, 30);
+	    ok.setBounds(30, 80, 90, 30);
+	    cancel.setBounds(140, 80, 90, 30);
+  }
+  
+  private void showGraphicObjects() {
+	  this.add(nameTip);
+	    this.add(ok);
+	    this.add(nameTextField);
+	    this.add(cancel);
+	    this.setVisible(true);
+  }
+  
   /**
    * 功能: 给成员属性添加监听事件
    * 作者: 黄欢欢   时间: 2016-09-21

@@ -30,9 +30,6 @@ import util.IChess;
  */
 
 public abstract class ChessTable extends JPanel {
-
-  protected Executor pool = Executors.newFixedThreadPool(2); // 2个线程容量的线程池
-  
   protected AudioPlayer audioPlayer=new AudioPlayer("resource/audio/down.wav");
   protected AudioPlayer audioStopPlayer=new AudioPlayer("resource/audio/stop.wav");
   protected ChessTable chessTable = this;
@@ -76,43 +73,7 @@ public abstract class ChessTable extends JPanel {
     Moves = 0;
     this.setBounds(0, 0, BOARD_WIDTH, BOARD_WIDTH);
   }
-
-  /**
-   * 功能: 机器人下棋 作者: 黄欢欢 时间: 2016-09-28
-   */
-  public synchronized void robotChess() {
-    System.out.println("机器线程开启");
-    synchronized (chessTable) {
-      while (true) {
-        if (!lock) {
-          try {
-            wait();
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-        } else {
-          try {
-            Thread.sleep(700);
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-          int[] XY = chessimpl.ComTurn(humanX, humanY);
-          mark[XY[0]][XY[1]] = 1;
-          repaint();
-          Moves++;
-          lock = false;
-          audioPlayer.run();
-          if(Moves==225)
-            room.drawGame();
-          else if(chessimpl.compare(XY[0],XY[1],1)){
-            room.defeat();
-          }else
-          chessTable.notifyAll();
-        }
-      }
-    }
-  }
-
+  
   /**
    * 输入：监听器所获取的鼠标坐标 功能：为棋盘绘出棋子 输出：无
    *
@@ -127,7 +88,6 @@ public abstract class ChessTable extends JPanel {
   public void paintComponent(Graphics g) {
     g.drawImage(new ImageIcon("resource/imag/pan.png").getImage(), -8, -8,
         565, 565, this);
-    // }
     Graphics2D g2 = (Graphics2D) g;
     g2.setColor(Color.black);
     char ch = 'A';
@@ -180,19 +140,16 @@ public abstract class ChessTable extends JPanel {
               (float) ellipse.getCenterX() - 1,
               (float) ellipse.getCenterY() - 1, Color.black);
           // 黑子
-          // System.out.println("m=" + m + "n=" + n);
           if (ChessImpl.chess[i][j] == 2) {
             // System.out.println("棋桌在"+m+","+n+"处画了一个黑子");
             g2.setPaint(gp2);
             g2.fill(ellipse);
             g2.setPaint(gp4);
-
           } else if (ChessImpl.chess[i][j] == 1) {// 白子
             // System.out.println("棋桌在"+m+","+n+"处画了一个白子");
             g2.setPaint(gp1);
             g2.fill(ellipse);
             g2.setPaint(gp3);
-
           } else {
             System.out.println("定位不准确，未获得棋子颜色");
           }
@@ -224,7 +181,6 @@ public abstract class ChessTable extends JPanel {
     System.out.println("我是TRUE：" + room.isCanplay());
     for (int i = 0; i < 15; i++) {
       for (int j = 0; j < 17; j++) {
-        // mark[i][j]=chess[i][j];
         ChessImpl.chess[i][j] = chess[i][j];
       }
     }

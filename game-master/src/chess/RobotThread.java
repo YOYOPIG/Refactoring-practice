@@ -8,8 +8,8 @@ import util.IChess;
  */
 public class RobotThread implements Runnable {
   private IChess chess;
-  private ChessTable chessTable;
-  public RobotThread(ChessTable chessTable,IChess chess){
+  private SingleplayerChessTable chessTable;
+  public RobotThread(SingleplayerChessTable chessTable,IChess chess){
     this.chessTable=chessTable;
     this.chess=chess;
   }
