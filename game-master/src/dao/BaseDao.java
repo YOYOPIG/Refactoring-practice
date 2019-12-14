@@ -109,7 +109,6 @@ public class BaseDao {
 
 	public static void doClose(Connection conn, Statement psm,
 			ResultSet rs) {
-		// 关闭各种资源
 		try {
 			if (rs != null)
 				rs.close();
@@ -118,7 +117,6 @@ public class BaseDao {
 			if (conn != null)
 				conn.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -126,12 +124,14 @@ public class BaseDao {
 		Connection connection = getConnection();
 		if (connection == null)
 			return false;
-		// 执行操作
+		return tryInsert(connection, sql, paras);
+	}
+	
+	private boolean tryInsert(Connection connection,String sql,String[] paras) {
 		PreparedStatement psm = null;
 		try {
 			psm = connection.prepareStatement(sql);
 			if (paras != null) {
-				// 设置动态参数 --> ?
 				int index = 1;
 				for (String str : paras) {
 					psm.setString(index++, str);
