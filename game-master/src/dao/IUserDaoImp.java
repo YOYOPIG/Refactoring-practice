@@ -98,6 +98,11 @@ public class IUserDaoImp implements IUserDao {
 		int	t=1;
 		ResultSet rs=b.doQuery(sql, paras);
 		User u=null;
+		t = tryGetWinNum(t, rs, u);
+	    return t;
+	}
+
+	private int tryGetWinNum(int t, ResultSet rs, User u) {
 		try {
 			while(rs.next())
 			{
@@ -109,9 +114,9 @@ public class IUserDaoImp implements IUserDao {
 			e.printStackTrace();	
 			t=0;
 		}
-	    return t;
+		return t;
 	}
-
+	
 	 /**
 	   * 功能：修改战绩
 	   * @param new_winNum 战绩
