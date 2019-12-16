@@ -164,7 +164,7 @@ public class RoomList extends JFrame {
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {//快速进入按钮
         ClientQuickEnterMsg msg=new ClientQuickEnterMsg(user);
-        MyClient.getMyClient().sendMsg(msg);
+        MyClient.getMyClient().trySendMessage(msg);
       }
     });
     button.setBounds(187, 13, 127, 30);
@@ -175,7 +175,7 @@ public class RoomList extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
     	  ClientLogoutMsg msg = new ClientLogoutMsg();
-          MyClient.getMyClient().sendMsg(msg);//发给服务器
+          MyClient.getMyClient().trySendMessage(msg);//发给服务器
         tohome();
       }
     });
@@ -216,7 +216,7 @@ public class RoomList extends JFrame {
       public void actionPerformed(ActionEvent e) { //用户头像按钮
         new UpdatePicture(user,0);//进入个人信息界面
         ClientClickUpdateMsg msg = new ClientClickUpdateMsg(user);
-        MyClient.getMyClient().sendMsg(msg);//发给服务器
+        MyClient.getMyClient().trySendMessage(msg);//发给服务器
       }
     });
     button_1.addMouseMotionListener(new MouseMotionAdapter() {
@@ -285,7 +285,7 @@ public class RoomList extends JFrame {
           if(str.length()!=0){
             //房间选择报文传输 聊天信息传输给其他用户的界面
             ClientClickChatMsg msg = new ClientClickChatMsg(str, user);
-            MyClient.getMyClient().sendMsg(msg);//发给服务器
+            MyClient.getMyClient().trySendMessage(msg);//发给服务器
 
           }
         }
@@ -303,7 +303,7 @@ public class RoomList extends JFrame {
         if(str.length()!=0) {
           //房间选择报文传输 聊天信息传输给其他用户的界面
           ClientClickChatMsg msg = new ClientClickChatMsg(str, user);
-          MyClient.getMyClient().sendMsg(msg);//发给服务器
+          MyClient.getMyClient().trySendMessage(msg);//发给服务器
 
         }
 
@@ -322,7 +322,7 @@ public class RoomList extends JFrame {
       public void windowClosing(WindowEvent e) {
         System.out.println("退出程序");
         ClientOffMsg msg = new ClientOffMsg();
-        MyClient.getMyClient().sendMsg(msg);
+        MyClient.getMyClient().trySendMessage(msg);
       }
     });
 
@@ -403,7 +403,7 @@ public class RoomList extends JFrame {
           System.out.println("roomid:" + roomid);
           //房间选择报文传输 roomid、username、isleft  传输给其他用户的界面
           ClientClickRoomMsg msg = new ClientClickRoomMsg(roomid, user, true);
-          MyClient.getMyClient().sendMsg(msg);//发给服务器
+          MyClient.getMyClient().trySendMessage(msg);//发给服务器
         }
 
       });
@@ -433,7 +433,7 @@ public class RoomList extends JFrame {
           System.out.println("roomid:" + roomid);
           //房间选择报文传输 roomid、username、isleft  传输给其他用户的界面
           ClientClickRoomMsg msg = new ClientClickRoomMsg(roomid, user, false);
-          MyClient.getMyClient().sendMsg(msg);//发给服务器
+          MyClient.getMyClient().trySendMessage(msg);//发给服务器
         }
       });
       panel_4.add(jpanel);

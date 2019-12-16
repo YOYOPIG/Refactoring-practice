@@ -47,7 +47,7 @@ public class MultiplayerRoom extends Room{
 	          visible = !visible;
 	          ready.setVisible(visible);
 	          ClientBeReady msg = new ClientBeReady(roomID, isleft);
-	          MyClient.getMyClient().sendMsg(msg);//发给服务器
+	          MyClient.getMyClient().trySendMessage(msg);//发给服务器
 	        }
 	      }
 	    });
@@ -70,10 +70,10 @@ public class MultiplayerRoom extends Room{
 	              null, options, options[0]);
 	          if (res == 0) return;
 	          ClientGameOver msg = new ClientGameOver(getRoomID(), !isleft);
-	          MyClient.getMyClient().sendMsg(msg);
+	          MyClient.getMyClient().trySendMessage(msg);
 	        }
 	        ClientOutRoomMsg msg1 = new ClientOutRoomMsg(roomID, isleft);
-	        MyClient.getMyClient().sendMsg(msg1);
+	        MyClient.getMyClient().trySendMessage(msg1);
 	        getChessPanel().getChessimpl().ResetGame();
 	        toRoomList();
 	      }
@@ -98,7 +98,7 @@ public class MultiplayerRoom extends Room{
 	            beforeRegret = isCanplay();
 	            setCanplay(false);
 	            ClientBackChess msg = new ClientBackChess(roomID, isleft);
-	            MyClient.getMyClient().sendMsg(msg);//发给服务器
+	            MyClient.getMyClient().trySendMessage(msg);//发给服务器
 	          }
 	        }
 	      }
@@ -120,7 +120,7 @@ public class MultiplayerRoom extends Room{
 	                new ImageIcon("resource/imag/touxiang.png"), options, options[0]);
 	            if (res == 1) {
 	              ClientGameOver msg = new ClientGameOver(getRoomID(), !isleft);
-	              MyClient.getMyClient().sendMsg(msg);
+	              MyClient.getMyClient().trySendMessage(msg);
 	            }
 	          }
 	      }
@@ -134,9 +134,9 @@ public class MultiplayerRoom extends Room{
 			@Override
 			public void windowClosing(WindowEvent e) {
 				ClientOutRoomMsg msg = new ClientOutRoomMsg(roomID, isleft);
-				MyClient.getMyClient().sendMsg(msg);
+				MyClient.getMyClient().trySendMessage(msg);
 				ClientOffMsg msg1 = new ClientOffMsg();
-				MyClient.getMyClient().sendMsg(msg1);
+				MyClient.getMyClient().trySendMessage(msg1);
 			}
 		});
 	  }

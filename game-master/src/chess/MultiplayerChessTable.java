@@ -37,19 +37,19 @@ public class MultiplayerChessTable extends ChessTable{
 	                System.out.println("kjdhasjdakdhads+==========" + ChessImpl.chess[0][0]);
 	                ClientMovePieces msg = new ClientMovePieces(
 	                    room.getRoomID(), room.isleft, ChessImpl.chess, false, humanX, humanY);
-	                MyClient.getMyClient().sendMsg(msg);
+	                MyClient.getMyClient().trySendMessage(msg);
 	                room.getChessPanel().setMark(humanX, humanY);
 	                room.repaint();
 	                audioPlayer.run();
 	                if(room.isleft) {
 	                  if (chessimpl.compare(humanX, humanY, 2)) {//黑棋赢了，发送游戏结束报文
 	                    ClientGameOver msg1 = new ClientGameOver(room.getRoomID(), room.isleft);
-	                    MyClient.getMyClient().sendMsg(msg1);
+	                    MyClient.getMyClient().trySendMessage(msg1);
 	                  }
 	                }else{
 	                  if (chessimpl.compare(humanX, humanY, 1)) {//白棋赢了
 	                    ClientGameOver msg1 = new ClientGameOver(room.getRoomID(), room.isleft);
-	                    MyClient.getMyClient().sendMsg(msg1);
+	                    MyClient.getMyClient().trySendMessage(msg1);
 	                  }
 	                }
 	              }

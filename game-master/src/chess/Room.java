@@ -351,7 +351,7 @@ public abstract class Room extends JFrame {
       backGame = false;
     }
     ClientBackResult msg = new ClientBackResult(result, roomID, isleft);
-    MyClient.getMyClient().sendMsg(msg);
+    MyClient.getMyClient().trySendMessage(msg);
   }
 
   public void BackFail() {
@@ -367,7 +367,7 @@ public abstract class Room extends JFrame {
     setCanplay(true);
     chessPanel.unpaintItem();//本身面板
     ClientMovePieces msg = new ClientMovePieces(roomID, isleft, ChessImpl.chess, true, 0, 0);
-    MyClient.getMyClient().sendMsg(msg);
+    MyClient.getMyClient().trySendMessage(msg);
     JOptionPane.showMessageDialog(this,
         "乖儿子", "对方同意了你的请求", JOptionPane.ERROR_MESSAGE);
   }

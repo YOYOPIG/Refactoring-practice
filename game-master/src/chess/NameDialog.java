@@ -87,7 +87,7 @@ public class NameDialog extends JDialog {
           } else {
             nameDialog.dispose();
             ClientLoginMsg msg = new ClientLoginMsg(user.getName());
-            MyClient.getMyClient().sendMsg(msg);
+            MyClient.getMyClient().trySendMessage(msg);
           }
 
         }

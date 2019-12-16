@@ -108,7 +108,6 @@ public class MyServer {
 		try {
 			server.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		setStarted(false);
@@ -122,16 +121,19 @@ public class MyServer {
 	class WaitForClientThread extends Thread{
 		public void run() {
 			try {
-				while(true){
-				     Socket client =server.accept();
-				     System.out.println(client+"成功连接服务器");
-				     ClientChatThread cct=new ClientChatThread(client);
-				     pool.add(cct);
-				     cct.start();
-				}
+				createThread();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+		}
+		
+		private void createThread() throws IOException {
+			while(true){
+			     Socket client =server.accept();
+			     System.out.println(client+"成功连接服务器");
+			     ClientChatThread cct=new ClientChatThread(client);
+			     pool.add(cct);
+			     cct.start();
 			}
 		}
 		
@@ -173,8 +175,6 @@ public class MyServer {
 						client.getOutputStream());
 				oos.writeObject(msg);
 				System.out.println("发送报文"+msg);
-			//	oos.close();
-				
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println("给"+client+"发送数据失败");
@@ -189,7 +189,6 @@ public class MyServer {
 				 msg.setClient(client);
 				 System.out.println("收到数据"+msg);
 				 msg.doBiz();
-			//	 ois.close();
 				 }
 			} catch (Exception e) {
 				e.printStackTrace();

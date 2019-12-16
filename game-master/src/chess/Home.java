@@ -76,7 +76,7 @@ public class Home extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
         ClientLoginMsg msg = new ClientLoginMsg(user.getName());
-        MyClient.getMyClient().sendMsg(msg);
+        MyClient.getMyClient().trySendMessage(msg);
       }
     });
 
@@ -85,7 +85,7 @@ public class Home extends JFrame {
       public void windowClosing(WindowEvent e) {
         System.out.println("End process");
         ClientLogoutMsg msg = new ClientLogoutMsg();
-        MyClient.getMyClient().sendMsg(msg);
+        MyClient.getMyClient().trySendMessage(msg);
       }
     });
   }

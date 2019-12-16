@@ -60,7 +60,7 @@ public class UpdatePicture extends JFrame {
   public void login(){
     dispose();
     ClientLoginMsg msg = new ClientLoginMsg(user.getName());
-    MyClient.getMyClient().sendMsg(msg);
+    MyClient.getMyClient().trySendMessage(msg);
   }
   
   public void updatePhoto(){

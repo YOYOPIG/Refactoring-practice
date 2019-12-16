@@ -44,7 +44,7 @@ public class MyClient {
 		return myclient;
 	}
 	public RoomList roomlist;
-     public RoomList getRoomlist() {
+    public RoomList getRoomlist() {
 		return roomlist;
 	}
 	public void setRoomlist(RoomList roomlist) {
@@ -67,12 +67,7 @@ public class MyClient {
 	 * @return是否成功连接
 	 */
 	public boolean connect(){
-		try {
-			client=new Socket("localhost",8888);		
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.setConnected(false);
-		}
+		createClientSocket();
 		this.setConnected(true);
 		new ReceiveServerThread(client).start();
 		return true;
@@ -85,13 +80,7 @@ public class MyClient {
 		if(client==null){
 			return true;
 		}
-		try {
-			client.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("关闭了");
-		}
+		closeClientSocket();
 		connected=false;
 		return true;
 	}
@@ -109,23 +98,22 @@ public class MyClient {
 		}
 
 		public void run() {
-			
 				try {
-					while(true){
-					 ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
-					 BaseMsg msg = (BaseMsg)ois.readObject();
-					 System.out.println("收到数据"+msg);
-					 msg.doBiz();
-			//		 ois.close();
-				}
-					} catch (IOException e) {
-					// TODO Auto-generated catch block
+					receiveMessage();
+				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-			
+				}
+		}
+		
+		private void receiveMessage() throws IOException, ClassNotFoundException {
+			while(true){
+				 ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
+				 BaseMsg msg = (BaseMsg)ois.readObject();
+				 System.out.println("收到数据"+msg);
+				 msg.doBiz();
+			}
 		}
 		
 	}
@@ -134,21 +122,36 @@ public class MyClient {
 	 * @param msg
 	 */
 	
-	public void sendMsg(BaseMsg msg){
+	public void trySendMessage(BaseMsg msg){
 		if(!this.isConnected()){
 			return;
 		}
-		
 		try {
-			ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
-			oos.writeObject(msg);
-			System.out.println("发送报文"+msg);
-		  //  oos.close();
+			sendMessage(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+	}
+	
+	private void sendMessage(BaseMsg msg) throws IOException {
+		ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
+		oos.writeObject(msg);
+	}
+	
+	private void createClientSocket() {
+		try {
+			client=new Socket("localhost",8888);		
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.setConnected(false);
+		}
+	}
+	
+	private void closeClientSocket() {
+		try {
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
