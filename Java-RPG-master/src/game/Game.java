@@ -52,7 +52,6 @@ public class Game extends Canvas implements Runnable {
 	public Font font;
 	public Player player;
 	
-	// dialog
 	public static Dialog dialog;
 	public static Hint hint;
 
@@ -65,19 +64,12 @@ public class Game extends Canvas implements Runnable {
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
-		//frame.setLayout(null);
 		frame.add(this, BorderLayout.CENTER);
-		//frame.add(this);
 		frame.pack();
-		//Container contentPane = frame.getContentPane();
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-		// init dialog
 		dialog=new Dialog(frame.getLayeredPane());
 		hint=new Hint(frame.getLayeredPane());
-		//Font.render("E Interact", screen, 100, 100, Colours.get(-1, -1, -1, 555));
-		//frame.add(dialog.panel,BorderLayout.SOUTH);
-		//contentPane.add(dialog.panel, BorderLayout.SOUTH);
 		
 		frame.setVisible(true);
 		ghost = new Ghost();
@@ -161,11 +153,9 @@ public class Game extends Canvas implements Runnable {
 		}
 	}
 
-//	private int x=0, y=0;
 	public void tick() {
 		tickCount++;
 		
-		/* hide and show the hint */
 		if(Player.itemID >=4 ) {
 			hint.showHint("[E] INTERACT");
 		}
@@ -196,8 +186,6 @@ public class Game extends Canvas implements Runnable {
 		level.renderTiles(screen, xOffset, yOffset);
 		level.renderEntities(screen);
 		
-		//testing
-		//font.render("Hi testing", screen, 32,0, Colours.get(-1, -1, -1, 555));
 		
 		for(int x = 0; x < level.width; x++) {
 			int colour = Colours.get(-1, -1, -1, 000);

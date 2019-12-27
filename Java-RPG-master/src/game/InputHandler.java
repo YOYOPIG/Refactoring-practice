@@ -30,7 +30,6 @@ public class InputHandler implements KeyListener{
 	public void keyPressed(KeyEvent e)
 	{
 		toggleKey(e.getKeyCode(), true);
-		//System.out.println(e.getKeyCode());
 	}
 	
 	public void keyReleased(KeyEvent e)
