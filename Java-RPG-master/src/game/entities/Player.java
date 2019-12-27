@@ -15,8 +15,6 @@ public class Player extends Mob{
 		this.input = input;
 	}
 	
-	
-	
 	public void tick() {
 		
 		int xa = 0;
@@ -29,22 +27,19 @@ public class Player extends Mob{
 		if(input.left.getPressed())	xa--;
 		
 		if(xa != 0 || ya != 0) {
-			//System.out.println("condition is good!");
 			move(xa, ya);
 			isMoving = true;
 		}
 		else {
-			//System.out.println("condition is not good!");
 			isMoving = false;
 		}
-//		this.scale = 2;		//scale up
 	}
 	
 	public void render(Screen screen) {
 		int xTile = 0;
 		int yTile = 28;
 		int walkingSpeed = 3;
-		int flipTop = (numSteps >> walkingSpeed) & 1;		//for animation
+		int flipTop = (numSteps >> walkingSpeed) & 1;
 		int flipBottom = (numSteps >> walkingSpeed) & 1;
 		
 		if(movingDir == 1) {
