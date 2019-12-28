@@ -7,7 +7,7 @@ import javax.swing.JLayeredPane;
 import gfx.Font;
 
 public class Hint {
-	private JLabel textbox; //the text to be shown
+	private JLabel textShown;
 	
 	public Hint()
 	{
@@ -16,32 +16,28 @@ public class Hint {
 	
 	public Hint(JLayeredPane layerPane)
 	{
-		//initialize the text box to show
-		textbox = new JLabel("E : Interact",JLabel.LEFT);
-		textbox.setFont(new java.awt.Font("TimesRoman", java.awt.Font.PLAIN, 30));
-		textbox.setVerticalAlignment(JLabel.CENTER);
-		textbox.setHorizontalAlignment(JLabel.CENTER);
-		//textbox.setBackground(new Color(0, 0, 0, 0));
-		//textbox.setForeground(Color.black);
-		//textbox.setOpaque(false);
-		// set position and dimension
-		textbox.setBounds(500, 820, 250, 80);
-		textbox.setVisible(true);
-		layerPane.add(textbox, new Integer(1));
+		initText();
+		layerPane.add(textShown, new Integer(1));
 		hideHint();
 	}
 	
-	// show
 	public void showHint(String msg)
 	{
-		textbox.setVisible(true);
-		textbox.setText(msg);
+		textShown.setVisible(true);
+		textShown.setText(msg);
 	}
 		
-	// hide
 	public void hideHint()
 	{
-		textbox.setVisible(false);
+		textShown.setVisible(false);
 	}
-		
+	
+	private void initText() {
+		textShown = new JLabel("E : Interact",JLabel.LEFT);
+		textShown.setFont(new java.awt.Font("TimesRoman", java.awt.Font.PLAIN, 30));
+		textShown.setVerticalAlignment(JLabel.CENTER);
+		textShown.setHorizontalAlignment(JLabel.CENTER);
+		textShown.setBounds(500, 820, 250, 80);
+		textShown.setVisible(true);
+	}
 }

@@ -25,10 +25,9 @@ import javax.swing.JPanel;
 
 public class Dialog{
 	
-	private JLabel textbox; //the text to be shown
+	private JLabel textShown;
 	private JLayeredPane frameLayers;
 	
-	// change position
 	public Dialog(){
 		System.out.println("Error! Please send a JLayeredPane to the Dialog class.");
 	}
@@ -36,42 +35,43 @@ public class Dialog{
 	public Dialog(JLayeredPane FL)
 	{
 		frameLayers = FL;
-		//initialize the text box to show
-		textbox = new JLabel("YEE",JLabel.LEFT);
-		textbox.setVerticalAlignment(JLabel.CENTER);
-		textbox.setHorizontalAlignment(JLabel.CENTER);
-		textbox.setVerticalTextPosition(JLabel.CENTER);
-		textbox.setHorizontalTextPosition(JLabel.CENTER);
-		textbox.setFont(new java.awt.Font("TimesRoman", java.awt.Font.PLAIN, 30));
-		//textbox.setBackground(Color.magenta);
-		//textbox.setForeground(Color.black);
-		textbox.setOpaque(true);
-		// set position and dimension
-		textbox.setBounds(25, 780, 1250, 160);
-		
-		//textbox.setIcon();
-		ImageIcon icon = new ImageIcon("res/dialog_box.png");
-		icon = new ImageIcon(icon.getImage().getScaledInstance(1250, 160, BufferedImage.SCALE_SMOOTH));
-		textbox.setIcon(icon);
-		textbox.setIconTextGap(-512); // set to -(width of image)
+		initText();
+		initIcon();
 		spawnDialog();
-		hideDialog();
 	}
-	// show
+	
 	public void showDialog(String msg)
 	{
-		textbox.setVisible(true);
-		textbox.setText(msg);
+		textShown.setVisible(true);
+		textShown.setText(msg);
 	}
 	
-	// hide
 	public void hideDialog()
 	{
-		textbox.setVisible(false);
+		textShown.setVisible(false);
 	}
 	
-	public void spawnDialog()
+	private void spawnDialog()
 	{
-		frameLayers.add(textbox, new Integer(2));
+		frameLayers.add(textShown, new Integer(2));
+		hideDialog();
+	}
+	
+	private void initText() {
+		textShown = new JLabel("YEE",JLabel.LEFT);
+		textShown.setVerticalAlignment(JLabel.CENTER);
+		textShown.setHorizontalAlignment(JLabel.CENTER);
+		textShown.setVerticalTextPosition(JLabel.CENTER);
+		textShown.setHorizontalTextPosition(JLabel.CENTER);
+		textShown.setFont(new java.awt.Font("TimesRoman", java.awt.Font.PLAIN, 30));
+		textShown.setOpaque(true);
+		textShown.setBounds(25, 780, 1250, 160);
+		textShown.setIconTextGap(-512); // set to -(width of image)
+	}
+	
+	private void initIcon() {
+		ImageIcon icon = new ImageIcon("res/dialog_box.png");
+		icon = new ImageIcon(icon.getImage().getScaledInstance(1250, 160, BufferedImage.SCALE_SMOOTH));
+		textShown.setIcon(icon);
 	}
 }
