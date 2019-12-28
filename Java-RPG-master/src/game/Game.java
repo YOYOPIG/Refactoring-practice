@@ -164,7 +164,7 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		//to interact use input.interact.getPressed() to return if E is pressed.
-		if(input.interact.getKeyDown() && Player.itemID >= 4 ) {
+		if(input.cmds[4].getKey().getKeyDown() && Player.itemID >= 4 ) {
 			
 			int NPCID = Player.itemID/4;
 			if(NPCID == 1) {

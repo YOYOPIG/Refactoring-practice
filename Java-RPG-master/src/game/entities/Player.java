@@ -21,10 +21,10 @@ public class Player extends Mob{
 		int ya = 0;
 
 		// player moves
-		if(input.up.getPressed())	ya--;
-		if(input.down.getPressed())	ya++;
-		if(input.right.getPressed())xa++;
-		if(input.left.getPressed())	xa--;
+		if(input.cmds[0].getKey().getPressed())	ya--;
+		if(input.cmds[1].getKey().getPressed())	ya++;
+		if(input.cmds[3].getKey().getPressed())xa++;
+		if(input.cmds[2].getKey().getPressed())	xa--;
 		
 		if(xa != 0 || ya != 0) {
 			move(xa, ya);
