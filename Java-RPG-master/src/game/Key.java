@@ -28,12 +28,15 @@ public class Key{
 			timesPressed++;
 		}
 	}
+	
 	public boolean getPressed() {
 		return isPressed;
 	}
+	
 	public int getTimesPressed() {
 		return timesPressed;
 	}
+	
 	public boolean getKeyDown()
 	{
 		if(pressChanged%3==2)
@@ -45,6 +48,5 @@ public class Key{
 		}
 		else
 			return false;
-		
 	}
 }

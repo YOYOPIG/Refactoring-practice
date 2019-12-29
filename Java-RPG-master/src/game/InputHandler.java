@@ -12,6 +12,8 @@ import java.awt.event.KeyListener;
 
 public class InputHandler implements KeyListener{
 	
+	public InputCommand cmds[] = new InputCommand[5];
+	
 	/** 
 	 * The Constructor simply connects this class to the main game,
 	 * making the class able to handle user input in the game. 
@@ -21,20 +23,6 @@ public class InputHandler implements KeyListener{
 		game.addKeyListener(this);
 		setupCommands();
 	}
-	
-	private void setCommand(int index, InputCommand cmd) {
-		cmds[index] = cmd;
-	}
-	
-	private void setupCommands() {
-		setCommand(0, new MoveForward());
-		setCommand(1, new MoveDown());
-		setCommand(2, new MoveLeft());
-		setCommand(3, new MoveRight());
-		setCommand(4, new InteractCommand());
-	}
-	
-	public InputCommand cmds[] = new InputCommand[5];
 	
 	public void keyPressed(KeyEvent e)
 	{
@@ -59,5 +47,17 @@ public class InputHandler implements KeyListener{
 			if(cmds[i].checkKeyCode(keyCode))
 				cmds[i].setKeyStatus(pressStatus);
 		}
+	}
+	
+	private void setCommand(int index, InputCommand cmd) {
+		cmds[index] = cmd;
+	}
+	
+	private void setupCommands() {
+		setCommand(0, new MoveForward());
+		setCommand(1, new MoveDown());
+		setCommand(2, new MoveLeft());
+		setCommand(3, new MoveRight());
+		setCommand(4, new InteractCommand());
 	}
 }

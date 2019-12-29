@@ -26,78 +26,43 @@ import ui.Hint;
 
 public class Game extends Canvas implements Runnable {
 
-	private static final long serialVersionUID = 1L;
-
 	public static final int WIDTH = 160;
 	public static final int HEIGHT = WIDTH / 12 * 9;
 	public static final int SCALE = 8;
 	public static final String NAME = "Game";
-
-	private JFrame frame;
+	public static Dialog dialog;
+	public static Hint hint;
+	
+	private static final long serialVersionUID = 1L;
 
 	public boolean running = false;
 	public int tickCount = 0;
-	
-	private BufferedImage image = new BufferedImage(WIDTH,HEIGHT, BufferedImage.TYPE_INT_RGB);
-	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-
-	private int[] colours=new int[6*6*6];
-	
-	
-	private Screen screen;
-	private Ghost ghost;
 	public InputHandler input;
-	
 	public Level level;
 	public Font font;
 	public Player player;
 	
-	public static Dialog dialog;
-	public static Hint hint;
+	private JFrame frame;
+	private BufferedImage image = new BufferedImage(WIDTH,HEIGHT, BufferedImage.TYPE_INT_RGB);
+	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+	private int[] colours=new int[6*6*6];
+	private Screen screen;
+	private Ghost ghost;
 
 	public Game() {
-		setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-
-		frame = new JFrame(NAME);
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new BorderLayout());
-		frame.add(this, BorderLayout.CENTER);
-		frame.pack();
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		dialog=new Dialog(frame.getLayeredPane());
-		hint=new Hint(frame.getLayeredPane());
-		
-		frame.setVisible(true);
+		initCanvas();
+		initFrame();
 		ghost = new Ghost();
-
 	}
 
-	public void init(){
-
-		int index=0;
-		for(int r=0;r<6;r++) {
-			for(int g=0;g<6;g++) {
-				for(int b=0;b<6;b++) {
-					int rr=(r*255/5);
-					int gg=(g*255/5);
-					int bb=(b*255/5);
-					
-					colours[index++]=rr<<16|gg<<8|bb;
-				}
-			}
-		}
-		
+	public void initGame(){
+		initColours();
 		screen= new Screen(WIDTH,HEIGHT,new SpriteSheet("/sprite_sheet.png"));
 		input = new InputHandler(this);
 		
 		level = new Level(64, 64);
 		player = new Player(level, 0, 0, input);
 		level.addEntity(player);
-		
 	}
 
 	public synchronized void start() {
@@ -119,7 +84,7 @@ public class Game extends Canvas implements Runnable {
 		long lastTimer = System.currentTimeMillis();
 		double delta = 0;
 
-		init();
+		initGame();
 
 		while (running) {
 			long now = System.nanoTime();
@@ -142,7 +107,6 @@ public class Game extends Canvas implements Runnable {
 			if (shouldRender) {
 				frames++;
 				render();
-
 			}
 			if (System.currentTimeMillis() - lastTimer >= 1000) {
 				lastTimer += 1000;
@@ -155,26 +119,18 @@ public class Game extends Canvas implements Runnable {
 
 	public void tick() {
 		tickCount++;
-		
-		if(Player.itemID >=4 ) {
-			hint.showHint("[E] INTERACT");
-		}
-		else {
-			hint.hideHint();
-		}
+		checkHint();
 		
 		//to interact use input.interact.getPressed() to return if E is pressed.
 		if(input.cmds[4].getKey().getKeyDown() && Player.itemID >= 4 ) {
-			
 			int NPCID = Player.itemID/4;
 			if(NPCID == 1) {
 				ghost.talkTo();
 			}
 		}
-		
 		level.tick();
-}
-
+	}
+	
 	public void render() {
 		BufferStrategy bs = getBufferStrategy();
 		if(bs == null) {
@@ -208,5 +164,47 @@ public class Game extends Canvas implements Runnable {
 	public static void main(String[] args) {
 		new Game().start();
 	}
-
+	
+	private void initCanvas() {
+		setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+	}
+	
+	private void initFrame() {
+		frame = new JFrame(NAME);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new BorderLayout());
+		frame.add(this, BorderLayout.CENTER);
+		frame.pack();
+		frame.setResizable(false);
+		frame.setLocationRelativeTo(null);
+		dialog=new Dialog(frame.getLayeredPane());
+		hint=new Hint(frame.getLayeredPane());
+		frame.setVisible(true);
+	}
+	
+	private void initColours() {
+		int index=0;
+		for(int r=0;r<6;r++) {
+			for(int g=0;g<6;g++) {
+				for(int b=0;b<6;b++) {
+					int rr=(r*255/5);
+					int gg=(g*255/5);
+					int bb=(b*255/5);
+					
+					colours[index++]=rr<<16|gg<<8|bb;
+				}
+			}
+		}
+	}
+	
+	private void checkHint() {
+		if(Player.itemID >=4 ) {
+			hint.showHint("[E] INTERACT");
+		}
+		else {
+			hint.hideHint();
+		}
+	}
 }
