@@ -17,7 +17,6 @@ public abstract class Tile {
 	public static final Tile NPC21 = new BasicSolidTile(6, 8, 29, Colours.get(111,222,333,444));
 	public static final Tile NPC22 = new BasicSolidTile(7, 9, 29, Colours.get(111,222,333,444));
 	
-	
 	protected byte id;
 	protected boolean solid;
 	protected boolean emitter;

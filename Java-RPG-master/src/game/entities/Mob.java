@@ -7,13 +7,13 @@ import level.tiles.Tile;
 
 public abstract class Mob extends Entity{
 
+	public static int itemID;
 	protected String name;
 	protected int speed;
 	protected int numSteps = 0;
 	protected boolean isMoving;
 	protected int movingDir = 1;
 	protected int scale = 1;
-	public static int itemID;
 	
 	public Mob(Level level, String name, int x, int y, int speed) {
 		super(level);

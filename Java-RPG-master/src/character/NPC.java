@@ -3,10 +3,11 @@ package character;
 import game.Game;
 
 public abstract class NPC {
+	public static boolean isTalking;
 	public int ID;
 	protected String[] msg;
 	protected int talkctr;
-	public static boolean isTalking;
+	
 	public NPC(int ID,String[] m,int talkctr) {
 		this.ID=ID;
 		msg=m;

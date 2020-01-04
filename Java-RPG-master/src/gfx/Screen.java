@@ -3,18 +3,14 @@ package gfx;
 public class Screen {
 	public static final int MAP_WIDTH=64;
 	public static final int MAP_WIDTH_MASK=MAP_WIDTH-1;
-	
 	public static final byte BIT_MIRROR_X = 0x01;
 	public static final byte BIT_MIRROR_Y = 0x02;
 	
 	public int[] pixels;
-	
 	public double xOffset=0;
 	public double yOffset=0;
-	 
 	public int width;
 	public int height;
-
 	public SpriteSheet sheet;
 
 	public Screen(int width,int height,SpriteSheet sheet){
