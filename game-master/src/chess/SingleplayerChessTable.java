@@ -25,20 +25,20 @@ public class SingleplayerChessTable extends ChessTable{
 	        int y = event.getY();
 	
 	        if (x > 30 && x < 535 && y > 30 && y < 535) {
-	          humanX = (x - 21) / 34;
-	          humanY = (y - 21) / 34;
-	            if (paintItem(humanX, humanY)) {
+	          mouseClickX = (x - 21) / 34;
+	          mouseClickY = (y - 21) / 34;
+	            if (paintItem(mouseClickX, mouseClickY)) {
 	              room.backGame=true;
 	              Moves++;
-	              System.out.println("黑棋在这" + humanX + "," + humanY);
+	              System.out.println("黑棋在这" + mouseClickX + "," + mouseClickY);
 	              System.out.println("is here!");
-	              mark[humanX][humanY] = 1;
+	              mark[mouseClickX][mouseClickY] = 1;
 	              lock = true;
 	              repaint();
 	              audioPlayer.run();
 	              if(Moves==225)
 	                room.drawGame();
-	              else if(chessimpl.compare(humanX,humanY,2)){
+	              else if(chessimpl.compare(mouseClickX,mouseClickY,2)){
 	                room.win();
 	              }else
 	              chessTable.notifyAll();
@@ -102,7 +102,7 @@ public class SingleplayerChessTable extends ChessTable{
 	  }
 	  
 	  private void updateGameSituation() {
-		  int[] XY = chessimpl.ComTurn(humanX, humanY);
+		  int[] XY = chessimpl.ComTurn(mouseClickX, mouseClickY);
 	      mark[XY[0]][XY[1]] = 1;
 	      repaint();
 	      Moves++;

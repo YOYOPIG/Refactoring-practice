@@ -55,10 +55,6 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
     hoverColorSet.bottomGradColor2 = Color.decode("#FFFFFF");
 
   }
-//
-//  public static ComponentUI createUI(JComponent c) {
-//      return new TabbedPaneUI();
-//  }
 
   @Override
   protected void installDefaults() {
@@ -108,10 +104,6 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
             carp.addPoint(0, lines[i] + rects[selectedIndex].height);
           }
           carp.addPoint(0, lines[i]);
-       //   g.setColor(Color.BLACK);
-        //  g.fillPolygon(carp);
-       //   g.setColor(darkShadow.darker());
-        //  g.drawPolygon(carp);
         }
       } else {
         int fila = 0;
@@ -192,8 +184,6 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
     Rectangle2D rec = new Rectangle2D.Float(x, y + h / 3, w, h*2 / 3 +1);
     Area a = new Area(rec);
     RoundRectangle2D rect = new RoundRectangle2D.Float(x, y, w, h, 15, 15);
-    // Area b = new Area(rect);
-    // a.intersect(b);
     return a;
   }
   private class ColorSet {
@@ -212,7 +202,6 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
     g.setFont(font);
     View v = getTextViewForTab(tabIndex);
     if (v != null) {
-      // html
       v.paint(g, textRect);
     } else {
       // plain text
@@ -240,8 +229,6 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
   protected int calculateTabWidth(int tabPlacement, int tabIndex,
                                   FontMetrics metrics) {
     return 120;
-//      return 10 + anchoFocoV
-//              + super.calculateTabWidth(tabPlacement, tabIndex, metrics);
   }
 
   @Override
@@ -263,7 +250,6 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
   @Override
   protected void paintTabBorder(Graphics g, int tabPlacement, int tabIndex,
                                 int x, int y, int w, int h, boolean isSelected) {
-//      if (isSelected) {
     g.setColor(Color.decode("#afafaf"));
     int[] xp = new int[] { x, x, x + 3, x + w - inclTab - 6,
         x + w - inclTab - 3, x + w - inclTab, x + w - inclTab, x };
@@ -273,7 +259,6 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
     g2D.drawPolygon(shape);
     g.setColor(Color.white);
     g.drawLine(x, y + h, x + w - inclTab, y + h);
-//      }
   }
 
   protected int getTabLabelShiftY(int tabPlacement, int tabIndex,
@@ -291,8 +276,6 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
                                      Rectangle[] rects, int tabIndex, Rectangle iconRect,
                                      Rectangle textRect, boolean isSelected) {
     if (tabPane.hasFocus() || isSelected) {
-      // g.setColor(UIManager.getColor("ScrollBar.thumbShadow"));
-      // g.drawPolygon(shape);
     }
   }
 

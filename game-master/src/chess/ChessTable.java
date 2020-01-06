@@ -34,8 +34,8 @@ public abstract class ChessTable extends JPanel {
   protected AudioPlayer audioStopPlayer=new AudioPlayer("resource/audio/stop.wav");
   protected ChessTable chessTable = this;
   protected boolean lock = false; // 同步锁
-  protected int humanX; // 鼠标点击的坐标
-  protected int humanY; // 鼠标点击的坐标
+  protected int mouseClickX;
+  protected int mouseClickY;
   protected Room room;
 
   public static final int chess_BLACK = 2;
@@ -141,12 +141,10 @@ public abstract class ChessTable extends JPanel {
               (float) ellipse.getCenterY() - 1, Color.black);
           // 黑子
           if (ChessImpl.chess[i][j] == 2) {
-            // System.out.println("棋桌在"+m+","+n+"处画了一个黑子");
             g2.setPaint(gp2);
             g2.fill(ellipse);
             g2.setPaint(gp4);
           } else if (ChessImpl.chess[i][j] == 1) {// 白子
-            // System.out.println("棋桌在"+m+","+n+"处画了一个白子");
             g2.setPaint(gp1);
             g2.fill(ellipse);
             g2.setPaint(gp3);

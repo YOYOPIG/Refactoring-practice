@@ -46,11 +46,7 @@ public class SendmailFrame extends JFrame {
 		configureFrame();
 		addSendButton();
 		configureTextArea();
-		addLabel("您希望我们游戏哪里还有待改善", 16, new Bound(76, 25, 263, 31));
-		addLabel("收 件 人 ：", 14, new Bound(37, 66, 77, 15));
-		addLabel("     五子棋游戏建议反馈部", 14, new Bound(96, 66, 205, 15));
-		addLabel("主   题  ：", 14, new Bound(37, 104, 77, 15));
-		addLabel("正   文  ：", 14, new Bound(37, 142, 77, 15));
+		addDefaultLabels();
 		configureTextField();
 		addExitButton();
 		addIcon();
@@ -83,6 +79,14 @@ public class SendmailFrame extends JFrame {
 		textField.setBounds(109, 101, 244, 21);
 		getContentPane().add(textField);
 		textField.setColumns(10);
+	}
+	
+	private void addDefaultLabels() {
+		addLabel("您希望我们游戏哪里还有待改善", 16, new Bound(76, 25, 263, 31));
+		addLabel("收 件 人 ：", 14, new Bound(37, 66, 77, 15));
+		addLabel("     五子棋游戏建议反馈部", 14, new Bound(96, 66, 205, 15));
+		addLabel("主   题  ：", 14, new Bound(37, 104, 77, 15));
+		addLabel("正   文  ：", 14, new Bound(37, 142, 77, 15));
 	}
 	
 	private class Bound {
